@@ -4,33 +4,26 @@ A RESTful API for emergency health triage that uses machine learning to assess r
 
 ## What it does
 
-This project combines a Spring Boot backend with a Python Flask microservice to create an emergency health triage system. Users can input symptoms, duration, and age, and the system will return a risk assessment (low/moderate/high) along with recommended actions.
+This project combines a Spring Boot backend with a Python Flask microservice to create a health triage system. Users can input symptoms, duration, and age, and the system will return a risk assessment (low/moderate/high) along with recommended actions.
 
 ## How it works
 
-- **Spring Boot API** (Port 8080): Handles HTTP requests and validation
-- **Flask ML Service** (Port 5001): Runs the machine learning model
-- **RandomForest Classifier**: Trained on medical data with 91.5% accuracy
+- **Spring Boot API**: Handles HTTP requests and validation
+- **Flask ML Service**: Runs the machine learning model
+- **RandomForest Classifier**: Trained on medical data sourced from Kaggle with 91.5% accuracy
 - **Real-time predictions**: Sub-100ms response times
 
 ## Tech Stack
 
 **Backend:**
-- Java 17 + Spring Boot 3.2.0
+- Java + Spring Boot
 - Spring WebFlux for reactive programming
 - Maven for build management
 
 **ML Service:**
-- Python 3.12 + Flask 3.0.0
+- Python + Flask 
 - Scikit-learn for machine learning
 - Joblib for model persistence
-
-## Getting Started
-
-### Prerequisites
-- Java 17+
-- Python 3.8+
-- Maven 3.6+
 
 ### Setup
 
@@ -123,54 +116,10 @@ Performs health triage assessment.
 
 ## Risk Levels
 
-| Risk Level | Action | Description |
-|------------|--------|-------------|
-| low | Monitor at home | Self-care recommended |
-| moderate | Visit urgent care | Professional evaluation needed |
-| high | Go to ER immediately | Emergency medical attention required |
+1. low -> Monitor at home -> Self-care recommended 
+2. moderate -> Visit urgent care -> Professional evaluation needed 
+3. high -> Go to ER immediately -> Emergency medical attention required 
 
-## Configuration
-
-The application uses `application.yml` for configuration:
-
-```yaml
-server:
-  port: 8080
-
-ml:
-  service:
-    url: http://localhost:5001
-
-logging:
-  level:
-    com.healthtriage: DEBUG
-```
-
-## Project Structure
-
-```
-Health-Triage-API/
-├── src/main/java/com/healthtriage/
-│   ├── HealthTriageApplication.java
-│   ├── controller/
-│   │   └── TriageController.java
-│   ├── service/
-│   │   └── TriageService.java
-│   ├── dto/
-│   │   ├── TriageRequest.java
-│   │   └── TriageResponse.java
-│   └── config/
-│       └── WebClientConfig.java
-├── src/main/resources/
-│   └── application.yml
-├── flask_service/
-│   ├── app_realistic.py
-│   ├── train_model.py
-│   ├── requirements.txt
-│   └── test_realistic_model.py
-├── pom.xml
-└── README.md
-```
 
 ## Development
 
@@ -208,38 +157,8 @@ mvn test
 cd flask_service && python3 test_realistic_model.py
 ```
 
-## Error Handling
-
-The API includes comprehensive error handling:
-
-- **Input validation**: Returns 400 for invalid input
-- **ML service unavailable**: Returns 503 with fallback response
-- **Generic errors**: Returns 500 with error message
-
-## Performance
-
-- API response time: < 100ms
-- Model accuracy: 91.5%
-- Supports 12 medical conditions
-- Handles concurrent requests via reactive programming
-
-## Security
-
-- Input validation and sanitization
-- CORS enabled for web clients
-- Error message sanitization
-- No sensitive data logging
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
 
 ## License
-
 MIT License
 
 ---
