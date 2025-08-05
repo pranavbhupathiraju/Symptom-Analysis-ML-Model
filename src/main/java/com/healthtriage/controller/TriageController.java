@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,19 +43,19 @@ public class TriageController {
     }
     
     @PostMapping("/triage")
-    public Mono<ResponseEntity<TriageResponse>> performTriage(@Valid @RequestBody TriageRequest request) {
+    public ResponseEntity<TriageResponse> performTriage(@Valid @RequestBody TriageRequest request) {
         logger.info("Received triage request: {}", request);
         
-        return triageService.getTriagePrediction(request)
-                .map(response -> {
-                    logger.info("Triage completed successfully: {}", response);
-                    return ResponseEntity.ok(response);
-                })
-                .onErrorResume(RuntimeException.class, error -> {
-                    logger.error("Triage failed: {}", error.getMessage());
-                    return Mono.just(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                            .body(new TriageResponse("unknown", "Service temporarily unavailable", 0.0)));
-                });
+        try {
+            TriageResponse response = triageService.getTriagePrediction(request);
+            logger.info("Triage completed successfully: {}", response);
+            return ResponseEntity.ok(response);
+            
+        } catch (RuntimeException e) {
+            logger.error("Triage failed: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(new TriageResponse("unknown", "Service temporarily unavailable", 0.0));
+        }
     }
     
     @ExceptionHandler(Exception.class)

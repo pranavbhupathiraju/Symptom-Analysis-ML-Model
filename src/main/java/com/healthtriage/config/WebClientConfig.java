@@ -2,16 +2,13 @@ package com.healthtriage.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.time.Duration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class WebClientConfig {
-
+public class RestTemplateConfig {
+    
     @Bean
-    public WebClient.Builder webClientBuilder() {
-        return WebClient.builder()
-                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024)); // 2MB
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 } 

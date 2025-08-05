@@ -11,13 +11,14 @@ This project combines a Spring Boot backend with a Python Flask microservice to 
 - **Spring Boot API** (Port 8080): Handles HTTP requests and validation
 - **Flask ML Service** (Port 5001): Runs the machine learning model
 - **RandomForest Classifier**: Trained on medical data with 91.5% accuracy
-- **Real-time predictions**: Sub-100ms response times
+- **Simple HTTP communication**: Uses RestTemplate for service-to-service calls
 
 ## Tech Stack
 
 **Backend:**
 - Java 17 + Spring Boot 3.2.0
-- Spring WebFlux for reactive programming
+- Spring Web MVC for REST endpoints
+- RestTemplate for HTTP communication
 - Maven for build management
 
 **ML Service:**
@@ -160,7 +161,7 @@ Health-Triage-API/
 │   │   ├── TriageRequest.java
 │   │   └── TriageResponse.java
 │   └── config/
-│       └── WebClientConfig.java
+│       └── RestTemplateConfig.java
 ├── src/main/resources/
 │   └── application.yml
 ├── flask_service/
@@ -210,7 +211,7 @@ cd flask_service && python3 test_realistic_model.py
 
 ## Error Handling
 
-The API includes comprehensive error handling:
+The API includes basic error handling:
 
 - **Input validation**: Returns 400 for invalid input
 - **ML service unavailable**: Returns 503 with fallback response
@@ -218,10 +219,10 @@ The API includes comprehensive error handling:
 
 ## Performance
 
-- API response time: < 100ms
+- API response time: < 200ms
 - Model accuracy: 91.5%
 - Supports 12 medical conditions
-- Handles concurrent requests via reactive programming
+- Simple synchronous HTTP calls
 
 ## Security
 
