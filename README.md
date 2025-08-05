@@ -1,35 +1,20 @@
-# Health Triage API
+# Symptom Assessment API
 
 
+## Project Details
 
-A RESTful API for emergency health triage that uses machine learning to assess risk levels and provide medical recommendations.
+The goal was to build a system that could quickly and accurately triage health symptoms. I decided to tackle this by integrating a machine learning model with a REST API, allowing for a fast and reliable way to get an initial risk assessment.
 
+I chose a microservice architecture to keep the backend separate from the ML logic. This approach allows for independent scaling and development.
 
+- ***Spring Boot:*** The API handles all incoming requests and acts as the interface
 
-## What it does
+- ***Flask Microservice:*** This service holds the machine learning model, a RandomForest Classifier I trained on synthetic medical data to achieve 91.5% accuracy.
 
-
-
-This project combines a Spring Boot backend with a Python Flask microservice to create an emergency health triage system. Users can input symptoms, duration, and age, and the system will return a risk assessment (low/moderate/high) along with recommended actions.
-
-
-
-## How it works
-
-
-
-- **Spring Boot API**: Handles HTTP requests and validation
-
-- **Flask ML Service**: Runs the machine learning model
-
-- **RandomForest Classifier**: Trained on medical data with 91.5% accuracy
-
-- **Simple HTTP communication**: Uses RestTemplate for service-to-service calls
-
+- ***Communication:*** The two services communicate via a simple HTTP connection using RestTemplate. 
 
 
 ## Tech Stack
-
 
 
 **Backend:**
