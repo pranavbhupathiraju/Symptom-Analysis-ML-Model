@@ -30,19 +30,19 @@ This project combines a Spring Boot backend with a Python Flask microservice to 
 ### Setup
 
 1. **Start the Flask ML Service:**
-```bash
+
 cd flask_service
 pip install -r requirements.txt
 python3 app_realistic.py
-```
+
 
 2. **Start the Spring Boot API:**
-```bash
+
 mvn spring-boot:run
-```
+
 
 3. **Test the API:**
-```bash
+
 # Get symptoms list
 curl http://localhost:8080/api/v1/symptoms
 
@@ -54,7 +54,7 @@ curl -X POST http://localhost:8080/api/v1/triage \
     "duration": 1,
     "age": 65
   }'
-```
+
 
 ## API Endpoints
 
@@ -62,7 +62,7 @@ curl -X POST http://localhost:8080/api/v1/triage \
 Returns all supported symptoms.
 
 **Response:**
-```json
+
 [
   "chest pain",
   "shortness of breath", 
@@ -93,28 +93,28 @@ Returns all supported symptoms.
   "anxiety",
   "mild fever"
 ]
-```
+
 
 ### POST /api/v1/triage
 Performs health triage assessment.
 
 **Request:**
-```json
+
 {
   "symptoms": ["chest pain", "shortness of breath", "nausea"],
   "duration": 1,
   "age": 65
 }
-```
+
 
 **Response:**
-```json
+
 {
   "risk_level": "high",
   "suggested_action": "Go to ER immediately",
   "confidence_score": 0.68
 }
-```
+
 
 ## Risk Levels
 1. low -> Monitor at home -> Self-care recommended 
@@ -125,7 +125,7 @@ Performs health triage assessment.
 
 The application uses `application.yml` for configuration:
 
-```yaml
+
 server:
   port: 8080
 
@@ -136,28 +136,28 @@ ml:
 logging:
   level:
     com.healthtriage: DEBUG
-```
+
 
 
 ## Development Instructions
 
 ### Building
-```bash
+`
 mvn clean compile
 mvn test
 mvn package
-```
+
 
 ### Training the ML Model
-```bash
+
 cd flask_service
 python3 train_model.py
-```
+
 
 ## Testing
 
 ### Manual Testing
-```bash
+
 # Test Flask service directly
 curl -X POST http://localhost:5001/predict \
   -H "Content-Type: application/json" \
@@ -167,13 +167,13 @@ curl -X POST http://localhost:5001/predict \
 curl -X POST http://localhost:8080/api/v1/triage \
   -H "Content-Type: application/json" \
   -d '{"symptoms": ["chest pain"], "duration": 1, "age": 65}'
-```
+
 
 ### Automated Testing
-```bash
+
 mvn test
 cd flask_service && python3 test_realistic_model.py
-```
+
 
 
 ## License
