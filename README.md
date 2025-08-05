@@ -8,8 +8,8 @@ This project combines a Spring Boot backend with a Python Flask microservice to 
 
 ## How it works
 
-- **Spring Boot API** (Port 8080): Handles HTTP requests and validation
-- **Flask ML Service** (Port 5001): Runs the machine learning model
+- **Spring Boot API**: Handles HTTP requests and validation
+- **Flask ML Service**: Runs the machine learning model
 - **RandomForest Classifier**: Trained on medical data with 91.5% accuracy
 - **Simple HTTP communication**: Uses RestTemplate for service-to-service calls
 
@@ -26,12 +26,6 @@ This project combines a Spring Boot backend with a Python Flask microservice to 
 - Scikit-learn for machine learning
 - Joblib for model persistence
 
-## Getting Started
-
-### Prerequisites
-- Java 17+
-- Python 3.8+
-- Maven 3.6+
 
 ### Setup
 
@@ -123,12 +117,9 @@ Performs health triage assessment.
 ```
 
 ## Risk Levels
-
-| Risk Level | Action | Description |
-|------------|--------|-------------|
-| low | Monitor at home | Self-care recommended |
-| moderate | Visit urgent care | Professional evaluation needed |
-| high | Go to ER immediately | Emergency medical attention required |
+1. low -> Monitor at home -> Self-care recommended 
+2. moderate -> Visit urgent care -> Professional evaluation needed 
+3. high -> Go to ER immediately -> Emergency medical attention required 
 
 ## Configuration
 
@@ -147,33 +138,8 @@ logging:
     com.healthtriage: DEBUG
 ```
 
-## Project Structure
 
-```
-Health-Triage-API/
-├── src/main/java/com/healthtriage/
-│   ├── HealthTriageApplication.java
-│   ├── controller/
-│   │   └── TriageController.java
-│   ├── service/
-│   │   └── TriageService.java
-│   ├── dto/
-│   │   ├── TriageRequest.java
-│   │   └── TriageResponse.java
-│   └── config/
-│       └── RestTemplateConfig.java
-├── src/main/resources/
-│   └── application.yml
-├── flask_service/
-│   ├── app_realistic.py
-│   ├── train_model.py
-│   ├── requirements.txt
-│   └── test_realistic_model.py
-├── pom.xml
-└── README.md
-```
-
-## Development
+## Development Instructions
 
 ### Building
 ```bash
@@ -209,35 +175,6 @@ mvn test
 cd flask_service && python3 test_realistic_model.py
 ```
 
-## Error Handling
-
-The API includes basic error handling:
-
-- **Input validation**: Returns 400 for invalid input
-- **ML service unavailable**: Returns 503 with fallback response
-- **Generic errors**: Returns 500 with error message
-
-## Performance
-
-- API response time: < 200ms
-- Model accuracy: 91.5%
-- Supports 12 medical conditions
-- Simple synchronous HTTP calls
-
-## Security
-
-- Input validation and sanitization
-- CORS enabled for web clients
-- Error message sanitization
-- No sensitive data logging
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
 
 ## License
 
@@ -245,4 +182,4 @@ MIT License
 
 ---
 
-Built with Spring Boot and Flask for emergency medical decision support. 
+Built with Spring Boot and Flask.
