@@ -1,185 +1,161 @@
-# Health Triage API
+Health Triage API: ML-Powered Health Assessment
+Ever wondered if a machine could help make an initial health assessment? This project is a RESTful API I built for that exact purpose. It uses a machine learning model to quickly assess a user's risk level based on their symptoms, providing immediate, actionable recommendations.
 
-A RESTful API for emergency health triage that uses machine learning to assess risk levels and provide medical recommendations.
+The Challenge
+The goal was to build a system that could quickly and accurately triage health symptoms. I decided to tackle this by integrating a robust machine learning model with a user-friendly API, allowing for a fast and reliable way to get an initial risk assessment without the need for a human on the front end.
 
-## What it does
+My Approach
+I chose a microservice architecture to keep the backend separate from the ML logic. This approach allows for independent scaling and development.
 
-This project combines a Spring Boot backend with a Python Flask microservice to create an emergency health triage system. Users can input symptoms, duration, and age, and the system will return a risk assessment (low/moderate/high) along with recommended actions.
+Spring Boot: The core API handles all incoming requests and validation, acting as the main interface.
 
-## How it works
+Flask Microservice: This service is a dedicated home for the machine learning model, a RandomForest Classifier I trained on medical data to achieve 91.5% accuracy.
 
-- **Spring Boot API**: Handles HTTP requests and validation
-- **Flask ML Service**: Runs the machine learning model
-- **RandomForest Classifier**: Trained on medical data with 91.5% accuracy
-- **Simple HTTP communication**: Uses RestTemplate for service-to-service calls
+Inter-Service Communication: The two services talk to each other via a simple HTTP connection using RestTemplate. This keeps the system lightweight and easy to maintain.
 
-## Tech Stack
+Tech Stack
+Backend:
 
-**Backend:**
-- Java 17 + Spring Boot 3.2.0
-- Spring Web MVC for REST endpoints
-- RestTemplate for HTTP communication
-- Maven for build management
+Java 17 + Spring Boot 3.2.0
 
-**ML Service:**
-- Python 3.12 + Flask 3.0.0
-- Scikit-learn for machine learning
-- Joblib for model persistence
+Spring Web MVC for REST endpoints
 
+RestTemplate for HTTP communication
 
-### Setup
+Maven for build management
 
-1. **Start the Flask ML Service:**
+ML Service:
+
+Python 3.12 + Flask 3.0.0
+
+Scikit-learn for machine learning
+
+Joblib for model persistence
+
+Getting Started
+1. Run the Flask ML Service First:
 
 cd flask_service
 pip install -r requirements.txt
 python3 app_realistic.py
-
-
-2. **Start the Spring Boot API:**
+2. Start the Spring Boot API:
 
 mvn spring-boot:run
-
-
-3. **Test the API:**
+3. Test the API:
 
 # Get symptoms list
 curl http://localhost:8080/api/v1/symptoms
 
 # Perform triage
 curl -X POST http://localhost:8080/api/v1/triage \
-  -H "Content-Type: application/json" \
-  -d '{
-    "symptoms": ["chest pain", "shortness of breath"],
-    "duration": 1,
-    "age": 65
-  }'
-
-
-## API Endpoints
-
-### GET /api/v1/symptoms
+  -H "Content-Type: application/json" \
+  -d '{
+    "symptoms": ["chest pain", "shortness of breath"],
+    "duration": 1,
+    "age": 65
+  }'
+API Endpoints
+GET /api/v1/symptoms
 Returns all supported symptoms.
 
-**Response:**
+Response:
+
+JSON
 
 [
-  "chest pain",
-  "shortness of breath", 
-  "fever",
-  "cough",
-  "headache",
-  "dizziness",
-  "nausea",
-  "vomiting",
-  "abdominal pain",
-  "fatigue",
-  "muscle aches",
-  "sore throat",
-  "runny nose",
-  "sneezing",
-  "itchy eyes",
-  "paralysis",
-  "vision problems",
-  "speech problems",
-  "loss of appetite",
-  "unconsciousness",
-  "confusion",
-  "excessive thirst",
-  "blurred vision",
-  "sensitivity to light",
-  "diarrhea",
-  "sleep problems",
-  "anxiety",
-  "mild fever"
+  "chest pain",
+  "shortness of breath", 
+  "fever",
+  "cough",
+  "headache",
+  "dizziness",
+  "nausea",
+  "vomiting",
+  "abdominal pain",
+  "fatigue",
+  "muscle aches",
+  "sore throat",
+  "runny nose",
+  "sneezing",
+  "itchy eyes",
+  "paralysis",
+  "vision problems",
+  "speech problems",
+  "loss of appetite",
+  "unconsciousness",
+  "confusion",
+  "excessive thirst",
+  "blurred vision",
+  "sensitivity to light",
+  "diarrhea",
+  "sleep problems",
+  "anxiety",
+  "mild fever"
 ]
-
-
-### POST /api/v1/triage
+POST /api/v1/triage
 Performs health triage assessment.
 
-**Request:**
+Request:
+
+JSON
 
 {
-  "symptoms": ["chest pain", "shortness of breath", "nausea"],
-  "duration": 1,
-  "age": 65
+  "symptoms": ["chest pain", "shortness of breath", "nausea"],
+  "duration": 1,
+  "age": 65
 }
+Response:
 
-
-**Response:**
+JSON
 
 {
-  "risk_level": "high",
-  "suggested_action": "Go to ER immediately",
-  "confidence_score": 0.68
+  "risk_level": "high",
+  "suggested_action": "Go to ER immediately",
+  "confidence_score": 0.68
 }
+Risk Levels
+low -> Monitor at home -> Self-care recommended 
 
+moderate -> Visit urgent care -> Professional evaluation needed 
 
-## Risk Levels
-1. low -> Monitor at home -> Self-care recommended 
-2. moderate -> Visit urgent care -> Professional evaluation needed 
-3. high -> Go to ER immediately -> Emergency medical attention required 
+high -> Go to ER immediately -> Emergency medical attention required 
 
-## Configuration
+Configuration
+The application uses application.yml for configuration:
 
-The application uses `application.yml` for configuration:
-
+YAML
 
 server:
-  port: 8080
+  port: 8080
 
 ml:
-  service:
-    url: http://localhost:5001
+  service:
+    url: http://localhost:5001
 
 logging:
-  level:
-    com.healthtriage: DEBUG
-
-
-
-## Development Instructions
-
-### Building
-`
+  level:
+    com.healthtriage: DEBUG
+Development Instructions
+Building
 mvn clean compile
 mvn test
 mvn package
-
-
-### Training the ML Model
-
+Training the ML Model
 cd flask_service
 python3 train_model.py
-
-
-## Testing
-
-### Manual Testing
-
+Testing
+Manual Testing
 # Test Flask service directly
 curl -X POST http://localhost:5001/predict \
-  -H "Content-Type: application/json" \
-  -d '{"symptoms": ["fever", "cough"], "duration": 3, "age": 35}'
+  -H "Content-Type: application/json" \
+  -d '{"symptoms": ["fever", "cough"], "duration": 3, "age": 35}'
 
 # Test Spring Boot API
 curl -X POST http://localhost:8080/api/v1/triage \
-  -H "Content-Type: application/json" \
-  -d '{"symptoms": ["chest pain"], "duration": 1, "age": 65}'
-
-
-### Automated Testing
-
+  -H "Content-Type: application/json" \
+  -d '{"symptoms": ["chest pain"], "duration": 1, "age": 65}'
+Automated Testing
 mvn test
 cd flask_service && python3 test_realistic_model.py
-
-
-
-## License
-
+License
 MIT License
-
----
-
-Built with Spring Boot and Flask.
